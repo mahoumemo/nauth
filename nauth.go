@@ -10,6 +10,7 @@ import (
 	"crypto/rand"
 	"encoding/base64"
 	"flag"
+	"fmt"
 	"io"
 	"log"
 	"net"
@@ -42,13 +43,13 @@ func (s *AuthServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 	body, err := io.ReadAll(r.Body)
 	if err != nil {
-		http.Error(w, "failed to read request body", http.StatusBadRequest)
+		http.Error(w, fmt.Sprintf("failed to read request body: %s", err), http.StatusBadRequest)
 		return
 	}
 
 	params, err := url.ParseQuery(string(body))
 	if err != nil {
-		http.Error(w, "failed to decode request body: %s", http.StatusBadRequest)
+		http.Error(w, fmt.Sprintf("failed to decode request body: %s", err), http.StatusBadRequest)
 		return
 	}
 
