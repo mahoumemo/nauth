@@ -28,6 +28,10 @@ func main() {
 	addr := flag.String("addr", "0.0.0.0:8100", "address to listen on")
 	flag.Parse()
 
+	if *proto == "unix" {
+		os.Remove(*addr)
+	}
+
 	listener, err := net.Listen(*proto, *addr)
 	if err != nil {
 		log.Fatalf("failed to create %s listener on %s: %s", *proto, *addr, err)
