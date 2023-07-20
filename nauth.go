@@ -16,6 +16,7 @@ import (
 	"net"
 	"net/http"
 	"net/url"
+	"os"
 	"strings"
 	"time"
 )
@@ -30,6 +31,10 @@ func main() {
 	listener, err := net.Listen(*proto, *addr)
 	if err != nil {
 		log.Fatalf("failed to create %s listener on %s: %s", *proto, *addr, err)
+	}
+
+	if *proto == "unix" {
+		os.Chmod(*addr, 0777)
 	}
 
 	http.Serve(listener, &AuthServer{})
